@@ -112,12 +112,52 @@ function addTeamMember() {
           github: answers.intSchool,
           role: 'Intern'
         });
-    }  
         // Prompt to add another team member
         addTeamMember();
       });
     } else if (answers.role === 'Finish building my team') {
         //Function to return to main menu and exit application
         process.exit();
-    }    
-  });    
+    } 
+    // Generate the HTML
+const html = `<html>
+<body>
+    <header>
+      <h1>My Team</h1>
+    </header>
+    <section> 
+      <style>
+        .answers {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border: 1px solid black;
+        width: 200px;
+        padding: 20px;
+        margin: 20px;
+        }
+      </style>
+      ${role.map(answers => `
+      <div class="employee">
+        <h2>${answers.teamManagersName, answers.engName, answers.intName}</h2>
+        <p><strong>Role:</strong> ${answers.role.Engineer, answers.Intern, answers.Manager}</p>
+        <p><strong>ID:</strong> ${answers.teamManagersId, answers.engId, answers.intId}</p>
+        <p><strong>Email:</strong> ${answers.teamManagersEmail, answers.engEmail, answers.intEmail}</p>
+        <p><strong>Office Number:</strong> ${answers.teamManagersOfficeNumber}</p>
+        <p><strong>Github:</strong> ${answers.engGithub}</p>
+        <p><strong>School:</strong> ${answers.intSchool}</p>
+      </div>
+    `).join('')}  
+    </section>
+</body>
+</html>`;
+
+// Write the HTML to a file
+fs.writeFileSync('team.html', html);
+
+// Open file in web browser
+const open = require('open');
+open('team.html');  
+  
+
+    }  
