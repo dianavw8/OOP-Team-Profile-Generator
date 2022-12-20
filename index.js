@@ -30,7 +30,7 @@ inquirer.prompt([
   ]).then(answers => {
     // Use the answers object to create an manager object
     let manager = new Manager(answers.teamManagersName, answers.teamManagersId, answers.teamManagersEmail, answers.teamManagersOfficeNumber);
-    console.log(manager);
+    console.log(manager));
    // Add the manager to the team array
   team.push(manager); 
   }
@@ -159,5 +159,3 @@ fs.writeFileSync('team.html', html);
 const open = require('open');
 open('team.html');  
   
-
-    }  
