@@ -2,10 +2,15 @@ const inquirer = require('inquirer');
 const fs = require('fs');
 const { choices } = require('yargs');
 const Manager = require('./lib/Manager');
+const Engineer = require('./lib/Engineer');
+const Intern = require('./lib/Intern');
 const team = []; // Array to store team members
 
+ addManager();
 
-inquirer.prompt([
+async function addManager() {
+
+  var managerInq = await inquirer.prompt([
     {
       type: 'input',
       name: 'teamManagersName',
@@ -27,27 +32,35 @@ inquirer.prompt([
       message: 'Enter the Team Manager\'s office number:'
     }
     
-  ]).then(answers => {
+  ]).then(async answers => {
     // Use the answers object to create an manager object
     let manager = new Manager(answers.teamManagersName, answers.teamManagersId, answers.teamManagersEmail, answers.teamManagersOfficeNumber);
-    console.log(manager));
    // Add the manager to the team array
   team.push(manager); 
-  }
+
+   await addTeamMember();
+
+  });
+
+};
 
  // Function to prompt to add an engineer or intern to the team.
-function addTeamMember() {
-  inquirer.prompt([
+async function addTeamMember() {
+  var inq2 = await inquirer.prompt([
     {
       type: 'list',
       name: 'role',
       message: 'Would you like to add an engineer, an intern or finish building my team?',
       choices: ['Engineer', 'Intern', 'Finish building my team']
     }   
-  ]).then(answers => {
+  ]).then(async answers => {
+
+
     if (answers.role === 'Engineer') {
+
+
       // Prompt for engineer information
-      inquirer.prompt([
+      var inqEng = await inquirer.prompt([
         {
           type: 'input',
           name: 'engName',
@@ -68,21 +81,17 @@ function addTeamMember() {
           name: 'engGithub',
           message: 'Enter the engineer\'s GitHub username:'
         }
-      ]).then(answers => {
+        
+      ]).then(async answers => {
         // Add the engineer to the team array
-        team.push({
-          name: answers.engName,
-          id: answers.engId,
-          email: answers.engEmail,
-          github: answers.engGithub,
-          role: 'Engineer'
-        });
+        team.push( new Engineer(answers.engName, answers.engId, answers.engEmail, answers.engGithub));
         // Prompt to add another team member
-        addTeamMember();
+        await addTeamMember();
       });
+
     } else if (answers.role === 'Intern') {
       // Prompt for intern information
-      inquirer.prompt([
+      var inqIntern = await inquirer.prompt([
         {
           type: 'input',
           name: 'intName',
@@ -103,31 +112,32 @@ function addTeamMember() {
           name: 'intSchool',
           message: 'Enter the intern\'s school:'
         }
-      ]).then(answers => {
-        // Add the intern to the team array
-        team.push({
-          name: answers.intName,
-          id: answers.intId,
-          email: answers.intEmail,
-          github: answers.intSchool,
-          role: 'Intern'
-        });
-        // Prompt to add another team member
-        addTeamMember();
+      ]).then(async answers => {
+        //Add the intern to the team array
+        team.push( new Intern (answers.intName, answers.intId, answers.intEmail, answers.intSchool));
+        //Prompt to add another team member
+        await addTeamMember();
       });
+
     } else if (answers.role === 'Finish building my team') {
         //Function to return to main menu and exit application
-        process.exit();
+        genHTML();
     } 
-    // Generate the HTML
-const html = `<html>
+    
+  })
+}
+
+function genHTML(){
+// Generate the HTML
+
+let html = `<html>
 <body>
     <header>
-      <h1>My Team</h1>
+      <h1 style="text-align-last: center;">My Team</h1>
     </header>
-    <section> 
+    <section style="display:flex;"> 
       <style>
-        .answers {
+        .employee {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -136,18 +146,50 @@ const html = `<html>
         padding: 20px;
         margin: 20px;
         }
-      </style>
-      ${role.map(answers => `
-      <div class="employee">
-        <h2>${answers.teamManagersName, answers.engName, answers.intName}</h2>
-        <p><strong>Role:</strong> ${answers.role.Engineer, answers.Intern, answers.Manager}</p>
-        <p><strong>ID:</strong> ${answers.teamManagersId, answers.engId, answers.intId}</p>
-        <p><strong>Email:</strong> ${answers.teamManagersEmail, answers.engEmail, answers.intEmail}</p>
-        <p><strong>Office Number:</strong> ${answers.teamManagersOfficeNumber}</p>
-        <p><strong>Github:</strong> ${answers.engGithub}</p>
-        <p><strong>School:</strong> ${answers.intSchool}</p>
-      </div>
-    `).join('')}  
+      </style>`;
+
+        team.forEach(teamMember => {
+         
+          if(teamMember.getRole() == "Manager"){
+            html += `
+            <div class="employee">
+              <h2>${teamMember.name}</h2>
+              <p><strong>Role:</strong> ${teamMember.getRole()}</p>
+              <p><strong>Name:</strong> ${teamMember.name}</p>
+              <p><strong>ID:</strong> ${teamMember.id}</p>
+              <p><strong>Email:</strong> ${teamMember.email}</p>
+              <p><strong>Office Number:</strong> ${teamMember.officeNumber}</p>
+            </div>
+          `;
+        }
+        if(teamMember.getRole() == 'Engineer'){
+            html += `
+            <div class="employee">
+              <h2>${teamMember.name}</h2>
+              <p><strong>Role:</strong> ${teamMember.getRole()}</p>
+              <p><strong>Name:</strong> ${teamMember.name}</p>
+              <p><strong>ID:</strong> ${teamMember.id}</p>
+              <p><strong>Email:</strong> ${teamMember.email}</p>
+              <p><strong>Github User Name:</strong> ${teamMember.github}</p>
+            </div>
+          `;
+        }
+        if(teamMember.getRole() == 'Intern'){
+            html += `
+            <div class="employee">
+              <h2>${teamMember.name}</h2>
+              <p><strong>Role:</strong> ${teamMember.getRole()}</p>
+              <p><strong>Name:</strong> ${teamMember.name}</p>
+              <p><strong>ID:</strong> ${teamMember.id}</p>
+              <p><strong>Email:</strong> ${teamMember.email}</p>
+              <p><strong>School:</strong> ${teamMember.school}</p>
+            </div>
+          `;
+        }
+
+        });
+
+     html += `
     </section>
 </body>
 </html>`;
@@ -158,4 +200,6 @@ fs.writeFileSync('team.html', html);
 // Open file in web browser
 const open = require('open');
 open('team.html');  
-  
+
+
+}
