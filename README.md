@@ -36,13 +36,13 @@ For more help and information achiving this, check out the following website: ht
 
 The refactored website can be found at: https://dianavw8.github.io/Team-Profile-Generator/
 
-The walkthrough video of the command-line functionality and tests passing can be seen at:  
+The walkthrough video of the command-line functionality can be seen at: https://drive.google.com/file/d/1HXxSdoGmLtwryPIV0ScwdQQagFEagEgo/view 
 
 The following image demonstrates the application's appearance and functionality in the Terminal:
-![The Professional README Generator webpage includes a README template.](./Develop/Professional-Readme-Screenshot2.jpg)
+![The Team Profile Generator terminal includes a screenshot of the questions in the terminal.](./images/Team-Profile-Generator-terminal-pic.jpg)
 
 The following image demonstrates the application's appearance:
-![The Professional README Generator webpage includes a README template.](./Develop/Professional-Readme-Screenshot.jpg)
+![The Professional README Generator webpage includes a README template.](./images/Team-Profile-Generator-html-pic.jpg)
 
 
 ## License
